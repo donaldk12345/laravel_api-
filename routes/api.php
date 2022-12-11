@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,9 @@ Route::get('calendars/{id}',[\App\Http\Controllers\CalendarController::class, 's
 Route::delete('calendars/{id}',[\App\Http\Controllers\CalendarController::class, 'destroy']);
 Route::put('calendars/{id}',[\App\Http\Controllers\CalendarController::class, 'update']);
 Route::post('calendars',[\App\Http\Controllers\CalendarController::class, 'store']);
+Route::post('images',[\App\Http\Controllers\ImageController::class, 'store']);
+
+Route::post('roles',[\App\Http\Controllers\RoleController::class, 'store']);
 
 Route::middleware('auth:sanctum')->group(function (){
 

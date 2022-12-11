@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Category;
 
 class Article extends Model
 {
@@ -13,8 +14,16 @@ class Article extends Model
         'title',
         'content',
         'author',
-        'is_publish'
+        'image',
+        'is_publish',
+        'category_id'
 
     ];
+
+    public function category(){
+
+        return $this->belongsTo(Category::class);
+       }
+
 
 }

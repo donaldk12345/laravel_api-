@@ -1,14 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Article;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Image; 
 
-
-
-class ArticleController extends Controller
+class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,14 +13,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-    
-        $articles = Article::with('category')->get();
-
-        $response= [
-            'articles'=>$articles
-        ];
-
-        return response()->json($response);
+        //
     }
 
     /**
@@ -34,7 +23,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
@@ -45,15 +34,32 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'category_id' => 'required',
-            'title' => 'required',
-            'content' => 'required',
-            'author' => 'required',
-            'is_publish' => 'required'
+        
+       /* $validator = Validator::make($request->all(),[ 
+            'file' => 'required|mimes:doc,docx,pdf,txt,csv|max:2048',
+      ]);   
+
+      if($validator->fails()) {          
+           
+          return response()->json(['error'=>$validator->errors()], 401);                        
+       }
+      */
+       if ($file = $request->file('file')) {
+        //$imagesName = $request->file('file')->store('public/files');
+        $imagesName = $request->file('file')->getClientOriginalName();
+        $path=$request->file('file')->storeAs('public/files', $imagesName);
+        $image = new Image();
+        $image->name= $imagesName;
+        $image->path=$path;
+        $image->save();
+           
+        return response()->json([
+            "success" => true,
+            "message" => "File successfully uploaded",
+            "file" => $image
         ]);
 
-        return Article::create($request->all());
+    }
     }
 
     /**
@@ -62,9 +68,9 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+     public function show($id)
     {
-        return Article::find($id);
+       
     }
 
     /**
@@ -75,7 +81,7 @@ class ArticleController extends Controller
      */
     public function edit($id)
     {
-        
+        //
     }
 
     /**
@@ -87,10 +93,7 @@ class ArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $article= Article::find($id);
-        $article->update($request->all());
-        return $article;
-    
+        //
     }
 
     /**
@@ -101,6 +104,6 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-        return Article::destroy($id);
+        //
     }
 }

@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
+use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-
-
-class ArticleController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,14 +14,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-    
-        $articles = Article::with('category')->get();
-
-        $response= [
-            'articles'=>$articles
-        ];
-
-        return response()->json($response);
+        return Role::all();
     }
 
     /**
@@ -34,7 +24,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
@@ -46,14 +36,10 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'required',
-            'title' => 'required',
-            'content' => 'required',
-            'author' => 'required',
-            'is_publish' => 'required'
+            'name' => 'required'     
         ]);
 
-        return Article::create($request->all());
+        return Role::create($request->all());
     }
 
     /**
@@ -64,7 +50,7 @@ class ArticleController extends Controller
      */
     public function show($id)
     {
-        return Article::find($id);
+        //
     }
 
     /**
@@ -75,7 +61,7 @@ class ArticleController extends Controller
      */
     public function edit($id)
     {
-        
+        //
     }
 
     /**
@@ -87,10 +73,7 @@ class ArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $article= Article::find($id);
-        $article->update($request->all());
-        return $article;
-    
+        //
     }
 
     /**
@@ -101,6 +84,6 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-        return Article::destroy($id);
+        //
     }
 }
