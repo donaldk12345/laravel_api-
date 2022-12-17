@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Validator;
 
 
 class ArticleController extends Controller
@@ -45,7 +45,9 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+    
+
+        $validator = Validator::make($request->all(),[
             'category_id' => 'required',
             'title' => 'required',
             'content' => 'required',
@@ -53,7 +55,24 @@ class ArticleController extends Controller
             'is_publish' => 'required'
         ]);
 
-        return Article::create($request->all());
+        if($validator->fails()){
+
+            return response()->json([
+                'errors' =>$validator->errors()
+            ],401);
+        }else{
+
+            $article= Article::create($request->all());
+
+            return response()->json([
+                'message' => 'article create successsfully',
+                'article' => $article
+            ],200);
+
+        }
+        
+
+    
     }
 
     /**
@@ -87,9 +106,16 @@ class ArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $article= Article::find($id);
-        $article->update($request->all());
-        return $article;
+            $article= Article::find($id);
+            $article->update($request->all());
+
+            return response()->json([
+                'message' => 'article update successsfully',
+                'article' => $article
+            ],200);
+        
+    
+   
     
     }
 
@@ -101,6 +127,11 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-        return Article::destroy($id);
+        $article= Article::destroy($id);
+
+        return response()->json([
+            'message' => 'article delete successsfully',
+        ],200);
+    
     }
 }

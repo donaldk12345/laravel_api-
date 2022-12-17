@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Image; 
-
+use Illuminate\Support\Facades\Validator;
 class ImageController extends Controller
 {
     /**
@@ -35,21 +35,27 @@ class ImageController extends Controller
     public function store(Request $request)
     {
         
-       /* $validator = Validator::make($request->all(),[ 
-            'file' => 'required|mimes:doc,docx,pdf,txt,csv|max:2048',
+        $validator = Validator::make($request->all(),[ 
+            'file' => 'required|mimes:jpeg,png,jpg|max:2048',
       ]);   
 
       if($validator->fails()) {          
            
           return response()->json(['error'=>$validator->errors()], 401);                        
        }
-      */
-       if ($file = $request->file('file')) {
+      
+
+        /*$request->validate([
+         'file' => ['required', 'max:2042','mimes:jpeg,png,jpg']
+
+       ]);*/
+    
+       if ($validator=$request->file('file')) {
         //$imagesName = $request->file('file')->store('public/files');
         $imagesName = $request->file('file')->getClientOriginalName();
         $path=$request->file('file')->storeAs('public/files', $imagesName);
         $image = new Image();
-        $image->name= $imagesName;
+        $image->file= $imagesName;
         $image->path=$path;
         $image->save();
            
@@ -58,8 +64,10 @@ class ImageController extends Controller
             "message" => "File successfully uploaded",
             "file" => $image
         ]);
+         }else{
+            return response()->json(["message"=> "Veillez choisir le bonne extension !",    'errors' =>$validator->errors()],401); 
 
-    }
+         }
     }
 
     /**

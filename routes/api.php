@@ -34,13 +34,15 @@ Route::get('calendars/{id}',[\App\Http\Controllers\CalendarController::class, 's
 Route::delete('calendars/{id}',[\App\Http\Controllers\CalendarController::class, 'destroy']);
 Route::put('calendars/{id}',[\App\Http\Controllers\CalendarController::class, 'update']);
 Route::post('calendars',[\App\Http\Controllers\CalendarController::class, 'store']);
-Route::post('images',[\App\Http\Controllers\ImageController::class, 'store']);
-
+Route::post('images',[\App\Http\Controllers\ImageController::class, 'store']); 
 Route::post('roles',[\App\Http\Controllers\RoleController::class, 'store']);
+
 
 Route::middleware('auth:sanctum')->group(function (){
 
     Route::get('user', [\App\Http\Controllers\AuthController::class, 'user'] );
     Route::post('logout', [\App\Http\Controllers\AuthController::class, 'logout'] );
+    Route::post('change-password', [\App\Http\Controllers\ProfileController::class, 'change_password'] ); 
+    
 
 }); 

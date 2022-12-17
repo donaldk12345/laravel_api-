@@ -21,8 +21,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
-        'role_id'
+        'password'
+     
     ];
 
     /**
@@ -35,9 +35,7 @@ class User extends Authenticatable
         
     ];
 
-    /**
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+
     public function roles(){
         return $this->belongsTo(Role::class);
     }
