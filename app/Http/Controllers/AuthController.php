@@ -12,52 +12,48 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthController extends Controller
 {
     //
-    public function register(Request $request){
+    public function register(Request $request)
+    {
 
         return User::create([
             'name' => $request->input('name'),
-            'email' =>$request->input('email'),
-            'password'=>Hash::make($request->input('password'))
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password'))
         ]);
-
-
-    
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
 
-        if(!Auth::attempt($request->only('email', 'password'))){
+        if (!Auth::attempt($request->only('email', 'password'))) {
             return response([
                 'message' => 'Invalid credentials !'
             ], Response::HTTP_UNAUTHORIZED);
-            
         }
-        $user= Auth::user();
+        $user = Auth::user();
 
-        if($user instanceof \App\Models\User){
+        if ($user instanceof \App\Models\User) {
 
-            $token=$user->createToken('token')->plainTextToken;
-     
-             return   response([
-                 'message' => 'success',
-                 'access_token' => 'Bearer',
-                 'jwt' => $token
-             ]);
+            $token = $user->createToken('token')->plainTextToken;
 
+            return   response([
+                'message' => 'success',
+                'access_token' => 'Bearer',
+                'jwt' => $token
+            ]);
         }
-
-       
-
     }
 
-    public function user(){
+    public function user()
+    {
         return Auth::user();
     }
 
 
-    
 
-    public function logout(){
+
+    public function logout()
+    {
         $cookie = Cookie::forget('jwt');
 
         return response([
@@ -65,4 +61,32 @@ class AuthController extends Controller
         ])->withCookie($cookie);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+
+
+        $users = User::with('role')->get();
+
+        $response = [
+            'users' => $users
+        ];
+
+        if ($response != null) {
+            return response()->json($response);
+        } else {
+            return response([
+                'message' => 'Invalid credentials !'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+    }
 }

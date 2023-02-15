@@ -21,8 +21,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password'
-     
+        'password',
+        'role_id'
+
     ];
 
     /**
@@ -32,12 +33,20 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password'
-        
+
     ];
 
 
-    public function roles(){
+    // public function roles(){
+    //     return $this->belongsTo(Role::class);
+    // }
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function role()
+    {
+
         return $this->belongsTo(Role::class);
     }
-
 }
