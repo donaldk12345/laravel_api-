@@ -15,7 +15,10 @@ class Role extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'permission'
+    ];
 
 
 
@@ -39,6 +42,6 @@ class Role extends Model
     public function permission()
     {
 
-        return $this->belongsToMany(Permission::class);
+        return $this->belongsToMany(Permission::class, 'roles_permissions');
     }
 }

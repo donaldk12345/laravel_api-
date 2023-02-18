@@ -49,4 +49,13 @@ class User extends Authenticatable
 
         return $this->belongsTo(Role::class);
     }
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function permission()
+    {
+
+        return $this->belongsToMany(Permission::class, 'roles_permissions');
+    }
 }

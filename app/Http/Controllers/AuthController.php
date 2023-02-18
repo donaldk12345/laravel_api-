@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserReSource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -15,11 +17,24 @@ class AuthController extends Controller
     public function register(Request $request)
     {
 
-        return User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password'))
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required|min:6',
         ]);
+        if ($validator->fails()) {
+
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 401);
+        } else {
+
+            return User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password'))
+            ]);
+        }
     }
 
     public function login(Request $request)
@@ -46,7 +61,10 @@ class AuthController extends Controller
 
     public function user()
     {
-        return Auth::user();
+        $user = Auth::user();
+        return (new UserReSource($user))->additional([
+            'data' => []
+        ]);
     }
 
 

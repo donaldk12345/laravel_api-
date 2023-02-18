@@ -17,11 +17,11 @@ class ArticleController extends Controller
      */
     public function index()
     {
-    
+
         $articles = Article::with('category')->get();
 
-        $response= [
-            'articles'=>$articles
+        $response = [
+            'articles' => $articles
         ];
 
         return response()->json($response);
@@ -34,7 +34,6 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        
     }
 
     /**
@@ -45,9 +44,9 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-    
 
-        $validator = Validator::make($request->all(),[
+
+        $validator = Validator::make($request->all(), [
             'category_id' => 'required',
             'title' => 'required',
             'content' => 'required',
@@ -55,24 +54,20 @@ class ArticleController extends Controller
             'is_publish' => 'required'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
 
             return response()->json([
-                'errors' =>$validator->errors()
-            ],401);
-        }else{
+                'errors' => $validator->errors()
+            ], 401);
+        } else {
 
-            $article= Article::create($request->all());
+            $article = Article::create($request->all());
 
             return response()->json([
                 'message' => 'article create successsfully',
                 'article' => $article
-            ],200);
-
+            ], 200);
         }
-        
-
-    
     }
 
     /**
@@ -94,7 +89,6 @@ class ArticleController extends Controller
      */
     public function edit($id)
     {
-        
     }
 
     /**
@@ -106,17 +100,13 @@ class ArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-            $article= Article::find($id);
-            $article->update($request->all());
+        $article = Article::find($id);
+        $article->update($request->all());
 
-            return response()->json([
-                'message' => 'article update successsfully',
-                'article' => $article
-            ],200);
-        
-    
-   
-    
+        return response()->json([
+            'message' => 'article update successsfully',
+            'article' => $article
+        ], 200);
     }
 
     /**
@@ -127,11 +117,10 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-        $article= Article::destroy($id);
+        $article = Article::destroy($id);
 
         return response()->json([
             'message' => 'article delete successsfully',
-        ],200);
-    
+        ], 200);
     }
 }

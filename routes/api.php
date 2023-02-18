@@ -37,6 +37,8 @@ Route::post('calendars', [\App\Http\Controllers\CalendarController::class, 'stor
 Route::post('images', [\App\Http\Controllers\ImageController::class, 'store']);
 Route::post('roles', [\App\Http\Controllers\RoleController::class, 'store']);
 Route::get('roles', [\App\Http\Controllers\RoleController::class, 'index']);
+Route::put('roles/{id}', [\App\Http\Controllers\RoleController::class, 'update']);
+Route::delete('roles/{id}', [\App\Http\Controllers\RoleController::class, 'destroy']);
 Route::get('users', [\App\Http\Controllers\AuthController::class, 'index']);
 
 
