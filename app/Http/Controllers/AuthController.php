@@ -45,26 +45,22 @@ class AuthController extends Controller
                 'message' => 'Invalid credentials !'
             ], Response::HTTP_UNAUTHORIZED);
         }
-        $user = Auth::user();
 
-        if ($user instanceof \App\Models\User) {
+        $user = User::where('email', $request['email'])->firstOrFail();
 
-            $token = $user->createToken('token')->plainTextToken;
 
-            return   response([
-                'message' => 'success',
-                'access_token' => 'Bearer',
-                'jwt' => $token
-            ]);
-        }
+        $token = $user->createToken('token')->plainTextToken;
+
+        return   response([
+            'message' => 'success',
+            'user' => $user,
+            'token' => $token
+        ]);
     }
 
-    public function user()
+    public function user(Request $request)
     {
-        $user = Auth::user();
-        return (new UserReSource($user))->additional([
-            'data' => []
-        ]);
+        return $request->user();
     }
 
 

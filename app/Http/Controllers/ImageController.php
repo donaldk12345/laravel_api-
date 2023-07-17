@@ -1,9 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Image;
 use Illuminate\Http\Request;
-use App\Models\Image; 
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+
 class ImageController extends Controller
 {
     /**
@@ -34,40 +38,39 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $validator = Validator::make($request->all(),[ 
-            'file' => 'required|mimes:jpeg,png,jpg|max:2048',
-      ]);   
 
-      if($validator->fails()) {          
-           
-          return response()->json(['error'=>$validator->errors()], 401);                        
-       }
-      
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
 
         /*$request->validate([
          'file' => ['required', 'max:2042','mimes:jpeg,png,jpg']
 
        ]);*/
-    
-       if ($validator=$request->file('file')) {
-        //$imagesName = $request->file('file')->store('public/files');
-        $imagesName = $request->file('file')->getClientOriginalName();
-        $path=$request->file('file')->storeAs('public/files', $imagesName);
-        $image = new Image();
-        $image->file= $imagesName;
-        $image->path=$path;
-        $image->save();
-           
-        return response()->json([
-            "success" => true,
-            "message" => "File successfully uploaded",
-            "file" => $image
-        ]);
-         }else{
-            return response()->json(["message"=> "Veillez choisir le bonne extension !",    'errors' =>$validator->errors()],401); 
 
-         }
+        if ($validator = $request->file('file')) {
+            //$imagesName = $request->file('file')->store('public/files');
+            $imagesName = $request->file('file')->getClientOriginalName();
+            $path = $request->file('file')->storeAs('public/files', $imagesName);
+            $image = new Image();
+            $image->file = $imagesName;
+            $image->path = $path;
+            $image->save();
+
+            return response()->json([
+                "success" => true,
+                "message" => "File successfully uploaded",
+                "file" => $image
+            ]);
+        } else {
+            return response()->json(["message" => "Veillez choisir le bonne extension !",    'errors' => $validator->errors()], 401);
+        }
     }
 
     /**
@@ -76,10 +79,16 @@ class ImageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-     public function show($id)
+    public function show($fileName)
     {
-       
+        $path = 'public/files/';
+
+
+        //$file = Storage::disk('files')->get($path);
+        return Image::find($path . $fileName);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

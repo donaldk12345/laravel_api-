@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\RoleController;
-
+use App\Http\Controllers\ForgotController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,6 +23,7 @@ use App\Http\Controllers\RoleController;
 
 Route::post('register', [\App\Http\Controllers\AuthController::class, 'register']);
 Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
+Route::post('forgot', [\App\Http\Controllers\ForgotController::class, 'forgotten']);
 Route::get('articles', [\App\Http\Controllers\ArticleController::class, 'index']);
 Route::get('articles/{id}', [\App\Http\Controllers\ArticleController::class, 'show']);
 Route::delete('articles/{id}', [\App\Http\Controllers\ArticleController::class, 'destroy']);
@@ -34,7 +35,8 @@ Route::get('calendars/{id}', [\App\Http\Controllers\CalendarController::class, '
 Route::delete('calendars/{id}', [\App\Http\Controllers\CalendarController::class, 'destroy']);
 Route::put('calendars/{id}', [\App\Http\Controllers\CalendarController::class, 'update']);
 Route::post('calendars', [\App\Http\Controllers\CalendarController::class, 'store']);
-Route::post('images', [\App\Http\Controllers\ImageController::class, 'store']);
+Route::post('file', [\App\Http\Controllers\ImageController::class, 'store']);
+Route::get('images/{fileName}', [\App\Http\Controllers\ImageController::class, 'show']);
 Route::post('roles', [\App\Http\Controllers\RoleController::class, 'store']);
 Route::get('roles', [\App\Http\Controllers\RoleController::class, 'index']);
 Route::put('roles/{id}', [\App\Http\Controllers\RoleController::class, 'update']);

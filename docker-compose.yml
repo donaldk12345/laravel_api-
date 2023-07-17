@@ -1,0 +1,19 @@
+version: '4'
+services:
+  maildev:
+        image: maildev/maildev
+        container_name: maildev_laravel_api
+        command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+        ports:
+          - "8081:80"
+        restart: always
+        networks:
+            - dev
+networks:
+    dev:
+
+volumes:
+    db-data:
+
+
+
